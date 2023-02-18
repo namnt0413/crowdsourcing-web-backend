@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('applies', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('job_id');
-            $table->datetime('date');
-            $table->integer('status')->default(1);
+            $table->string('name');
+            $table->integer('category_id');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applies');
+        Schema::dropIfExists('positions');
     }
 };

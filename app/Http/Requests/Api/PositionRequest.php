@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CityRequest extends FormRequest
+class PositionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,6 +27,9 @@ class CityRequest extends FormRequest
             'name' => [
                 'required',
             ],
+            'category_id' => [
+                'required',
+            ],
         ];
     }
 
@@ -34,6 +37,7 @@ class CityRequest extends FormRequest
     {
         return [
             'name.required' => 'Tên không được phép để trống',
+            'category_id.required' => 'Danh mục không được phép để trống',
         ];
     }
 }

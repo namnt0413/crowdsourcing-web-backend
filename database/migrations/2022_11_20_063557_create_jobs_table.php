@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('category_id');
             $table->integer('position_id');
             $table->integer('city_id');
-            $table->integer('status');
+            $table->tinyInteger('status')->default('1');
             $table->datetime('deadline');
             $table->timestamps();
         });

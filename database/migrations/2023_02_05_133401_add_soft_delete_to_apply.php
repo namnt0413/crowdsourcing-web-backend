@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('applies', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->integer('job_id');
-            $table->datetime('date');
-            $table->integer('status')->default(1);
-            $table->timestamps();
+        Schema::table('applies', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applies');
+        Schema::table('applies', function (Blueprint $table) {
+            $table->dropColumn('deleted_at');
+        });
     }
 };

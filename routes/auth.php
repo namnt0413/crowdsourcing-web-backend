@@ -8,6 +8,13 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CompanyAuth\CompanyAuthenticatedSessionController;
+use App\Http\Controllers\CompanyAuth\CompanyEmailVerificationNotificationController;
+use App\Http\Controllers\CompanyAuth\CompanyNewPasswordController;
+use App\Http\Controllers\CompanyAuth\CompanyPasswordResetLinkController;
+use App\Http\Controllers\CompanyAuth\CompanyRegisteredUserController;
+use App\Http\Controllers\CompanyAuth\CompanyVerifyEmailController;
+
 Route::post('/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest')
                 ->name('register');
@@ -35,3 +42,40 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+Route::post('/company-register', [CompanyRegisteredUserController::class, 'store'])
+                ->middleware('company')
+                ->name('register');
+
+Route::post('/company-login', [CompanyAuthenticatedSessionController::class, 'store'])
+                ->middleware('company')
+                ->name('login');
+
+Route::post('/company-forgot-password', [CompanyPasswordResetLinkController::class, 'store'])
+                ->middleware('company')
+                ->name('password.email');
+
+Route::post('/company-reset-password', [CompanyNewPasswordController::class, 'store'])
+                ->middleware('company')
+                ->name('password.update');
+
+Route::get('/company-verify-email/{id}/{hash}', [CompanyVerifyEmailController::class, '__invoke'])
+                ->middleware(['company', 'signed', 'throttle:6,1'])
+                ->name('verification.verify');
+
+Route::post('/company-email/verification-notification', [CompanyEmailVerificationNotificationController::class, 'store'])
+                ->middleware(['company', 'throttle:6,1'])
+                ->name('verification.send');
+
+Route::post('/company-logout', [CompanyAuthenticatedSessionController::class, 'destroy'])
+                ->middleware('company')
+                ->name('logout');
+
+
