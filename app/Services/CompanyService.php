@@ -13,5 +13,14 @@ class CompanyService
         return $company;
     }
 
+    public function edit($request, $company) {
+        return $company->update([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'avatar_url'=> $request->avatar_url,
+            'address'   => $request->address,
+            'description' => $request->description,
+        ]);
+    }
 
 }

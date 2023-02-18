@@ -46,7 +46,7 @@ class JobController extends Controller
                 ]);
             }
 
-        } else {
+            } else {
             return response([
                 'status' => 404,
                 'message' => 'Please sign in/up company account to do this action'

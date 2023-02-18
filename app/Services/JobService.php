@@ -34,7 +34,7 @@ class JobService
 
     public function getAllJobs()
     {
-        $jobs = Job::all();
+        $jobs = Job::select('*')->with('company','category','city','position')->get();
         return $jobs;
     }
 

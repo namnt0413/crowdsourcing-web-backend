@@ -5,13 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PositionController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\ApplyController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CompanyController;
 
-use App\Http\Controllers\CompanyAuth\CompanyAuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,27 +21,12 @@ use App\Http\Controllers\CompanyAuth\CompanyAuthController;
 |
 */
 
-Route::post('login', [AuthController::class,'login']);
-Route::post('register', [AuthController::class,'register']);
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();
+});
 
-Route::post('company-login', [CompanyAuthController::class,'login']);
-Route::post('company-register', [CompanyAuthController::class,'register']);
-
-Route::group(['middleware' => 'api'], function(){
-    Route::post('logout',  [AuthController::class,'logout']);
-    Route::post('refresh',  [AuthController::class,'refresh']);
-    Route::post('me',  [AuthController::class,'me']);
-    Route::get('user', [AuthController::class,'user']);
-
-    Route::post('forgot-password',  [ForgotPasswordController::class,'sendEmail']);
-    Route::post('reset-password', [ResetPasswordController::class,'passwordResetProcess']);
-
-    Route::post('company-logout',  [CompanyAuthController::class,'logout']);
-    Route::post('company-refresh',  [CompanyAuthController::class,'refresh']);
-    Route::get('company', [CompanyAuthController::class,'company']);
-
-    Route::post('company-forgot-password',  [CompanyForgotPasswordController::class,'sendEmail']);
-    Route::post('company-reset-password', [CompanyResetPasswordController::class,'passwordResetProcess']);
+Route::middleware(['auth:company'])->get('/company', function (Request $request) {
+    return $request->user();
 });
 
 Route::group([ 'as' => ''], function () {
@@ -62,6 +45,7 @@ Route::group([ 'as' => ''], function () {
     Route::name('positions.')->prefix('position')->group(function () {
         Route::get('/all', [PositionController::class, 'all'])->name('all');
     });
+
 
     //Job
     Route::name('job.')->prefix('job')->group(function () {
@@ -82,5 +66,16 @@ Route::group([ 'as' => ''], function () {
         Route::get('/list-by-company/{company_id}', [ApplyController::class, 'listByCompany']);
         Route::get('/list-by-user/{user_id}', [ApplyController::class, 'listByUser']);
     });
+
+    //User
+    Route::name('user.')->prefix('user')->group(function () {
+        Route::put('/update-profile', [UserController::class, 'updateProfile']);
+    });
+
+    //Company
+    Route::name('company.')->prefix('company')->group(function () {
+        Route::put('/update-info', [CompanyController::class, 'updateInfo']);
+    });
+
 
 });
