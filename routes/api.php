@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\ApplyController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\BookmarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,7 @@ Route::group([ 'as' => ''], function () {
         Route::get('/get-all-jobs', [JobController::class, 'getAllJobs']);
         Route::get('get-company-jobs/{company_id}', [JobController::class, 'getCompanyJobs']);
         Route::get('filter-jobs', [JobController::class, 'filterJobs']);
+        Route::put('/toggle-status-job', [JobController::class, 'toggleStatusJob']);
     });
 
     //Apply
@@ -70,11 +72,22 @@ Route::group([ 'as' => ''], function () {
     //User
     Route::name('user.')->prefix('user')->group(function () {
         Route::put('/update-profile', [UserController::class, 'updateProfile']);
+        Route::get('filter-candidates', [UserController::class, 'filterCandidates']);
+        Route::get('/get-finding-job-user', [UserController::class, 'getFindingJobUser']);
+        Route::put('/toggle-is-finding-job', [UserController::class, 'toggleIsFindingJob']);
     });
 
     //Company
     Route::name('company.')->prefix('company')->group(function () {
         Route::put('/update-info', [CompanyController::class, 'updateInfo']);
+        Route::get('/get-all-companies', [CompanyController::class, 'getAllCompanies']);
+    });
+
+    //Bookmark
+    Route::name('bookmark.')->prefix('bookmark')->group(function () {
+        Route::post('/create', [BookmarkController::class, 'create']);
+        Route::delete('/delete/{id}', [BookmarkController::class, 'delete']);
+        Route::get('/list-candidates/{company_id}', [BookmarkController::class, 'listCandidates']);
     });
 
 

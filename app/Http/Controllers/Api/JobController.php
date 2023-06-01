@@ -45,8 +45,7 @@ class JobController extends Controller
                     'message' => 'Do not have permission'
                 ]);
             }
-
-            } else {
+        } else {
             return response([
                 'status' => 404,
                 'message' => 'Please sign in/up company account to do this action'
@@ -84,7 +83,7 @@ class JobController extends Controller
 
     public function detail($id)
     {
-        $job = $this->jobService->findOrFailById($id);
+        $job = $this->jobService->detailJob($id);
         return response([
             'data' => $job,
             'status' => 200,
@@ -102,9 +101,9 @@ class JobController extends Controller
         ]);
     }
 
-    public function getCompanyJobs($company_id)
+    public function getCompanyJobs(Request $request, $company_id)
     {
-        $jobs = $this->jobService->getCompanyJobs($company_id);
+        $jobs = $this->jobService->getCompanyJobs($company_id, $request);
         return response([
             'data' => $jobs,
             'status' => 200,
@@ -112,7 +111,8 @@ class JobController extends Controller
         ]);
     }
 
-    public function filterJobs(Request $request) {
+    public function filterJobs(Request $request)
+    {
         $jobs = $this->jobService->filterJobs($request);
 
         return response([
@@ -122,5 +122,20 @@ class JobController extends Controller
         ]);;
     }
 
-
+    public function toggleStatusJob(Request $request)
+    {
+        if ( isset($request->job_id) ) {
+            $job = Job::findOrFail($request->job_id);
+            $this->jobService->toggleStatusJob($job);
+            return response([
+                'status' => 200,
+                'message' => 'OK'
+            ]);
+        } else {
+            return response([
+                'status' => 404,
+                'message' => 'Error'
+            ]);
+        }
+    }
 }

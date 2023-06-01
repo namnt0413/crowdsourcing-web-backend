@@ -8,12 +8,14 @@ use Carbon\Carbon;
 class CompanyService
 {
 
-    public function findOrFailById($id) {
+    public function findOrFailById($id)
+    {
         $company = Company::findOrFail($id);
         return $company;
     }
 
-    public function edit($request, $company) {
+    public function edit($request, $company)
+    {
         return $company->update([
             'name'      => $request->name,
             'email'     => $request->email,
@@ -21,6 +23,12 @@ class CompanyService
             'address'   => $request->address,
             'description' => $request->description,
         ]);
+    }
+
+    public function getAllCompanies()
+    {
+        $companies = Company::all();
+        return $companies;
     }
 
 }

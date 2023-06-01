@@ -63,4 +63,10 @@ class Job extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    public function apply()
+    {
+        return $this->hasMany(Apply::class);
+    }
+
 }

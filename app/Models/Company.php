@@ -25,7 +25,8 @@ class Company extends Authenticatable
         'password',
         'avatar_url',
         'address',
-        'description'
+        'description',
+        'avatar_url',
     ];
 
     /**
