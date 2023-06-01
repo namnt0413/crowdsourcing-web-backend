@@ -12,11 +12,13 @@ class CompanyController extends Controller
 {
     private $CompanyService;
 
-    public function __construct( CompanyService $CompanyService){
+    public function __construct( CompanyService $CompanyService)
+    {
         $this->CompanyService = $CompanyService;
     }
 
-    public function updateInfo(CompanyRequest $request, Company $company) {
+    public function updateInfo(CompanyRequest $request, Company $company)
+    {
         $company = Company::findOrFail($request->company_id);
         $this->CompanyService->edit($request, $company);
         return response([
@@ -24,4 +26,22 @@ class CompanyController extends Controller
             'message' => 'OK'
         ]);
     }
+
+    public function getAllCompanies ()
+    {
+        $companies = $this->CompanyService->getAllCompanies();
+        if ( $companies ) {
+            return response([
+                'data' => $companies,
+                'status' => 200,
+                'message' => 'OK'
+            ]);
+        } else {
+            return response([
+                'status' => 404,
+                'message' => 'Error'
+            ]);
+        }
+    }
+
 }

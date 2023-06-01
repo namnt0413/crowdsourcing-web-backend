@@ -7,12 +7,31 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Api\ApplyRequest;
 use App\Services\ApplyService;
 use App\Models\Apply;
+use App\Models\Job;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ApplyMail;
+use Carbon\Carbon;
 
 class ApplyController extends Controller
 {
+    // public function sendEmail(Request $request)  // Send email function
+    // {
+    //     if (!$this->validateEmail($request->email)) {  // check if exist email
+    //         return $this->failedResponse();
+    //     }
+    //     $this->send($request->email);  // create token and send mail
+    //     return $this->successResponse();
+    // }
+
+    // public function send($email)
+    // {
+    //     $token = $this->createToken($email);
+    //     Mail::to($email)->send(new ForgotPasswordMail($token, $email));  // reset token
+    // }
+
     public function create(ApplyRequest $request)
     {
         $todayApply = DB::table('applies')
@@ -27,8 +46,16 @@ class ApplyController extends Controller
         ->whereRaw( 'deleted_at IS NULL')
         ->first();
 
-        if( $todayApply->count < 5 && !isset($checkExist)) {     // max times apply job in a day is 5
+        $applyJob = Job::where([ 'id' => $request->job_id])->with('company')->first();
+        $checkDeadline = ($request->date < $applyJob->deadline);
+        // dd($request->date < $applyJob->deadline );
+
+        if( $todayApply->count < 5 && !isset($checkExist) && $checkDeadline ) {     // max times apply job in a day is 5
             Apply::create($request->validated());
+            $candidate = User::where([ 'id' => $request->user_id])->select('name')->first();
+            Mail::to($applyJob->company->email)
+                ->send(new ApplyMail($candidate->name,$applyJob->title));
+
             return response([
                 'status' => 200,
                 'message' => 'OK'
@@ -75,16 +102,17 @@ class ApplyController extends Controller
         ]);
     }
 
-    // public function listByCompany($company_id)
-    // {
-    //     $companyApplies = Apply::where('job_id', $company_id)
-    //     ->whereRaw( 'deleted_at IS NULL')->get();
-    //     return response([
-    //         'data' => $companyApplies,
-    //         'status' => 200,
-    //         'message' => 'OK'
-    //     ]);
-    // }
+    public function listByCompany($company_id)
+    {
+        $companyApplies = Apply::select('applies.*')->with('user','job')->leftJoin('jobs', 'applies.job_id', '=', 'jobs.id')
+        ->where('jobs.company_id',$company_id)
+        ->whereRaw( 'deleted_at IS NULL')->get();
+        return response([
+            'data' => $companyApplies,
+            'status' => 200,
+            'message' => 'OK'
+        ]);
+    }
 
     public function listByUser($user_id)
     {

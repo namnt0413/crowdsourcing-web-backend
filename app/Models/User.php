@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'password',
         'birthday',
         'skill',
         'school',
@@ -27,6 +28,8 @@ class User extends Authenticatable
         'activity',
         'prize',
         'favourite',
+        'is_finding_job',
+        'avatar'
     ];
 
     /**
@@ -47,4 +50,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function scopeSkill ($query, $request)
+    {
+        if ($request->has('skill')) {
+            $query->where('skill', 'LIKE', '%' . $request->skill . '%');
+        }
+        return $query;
+    }
+
 }

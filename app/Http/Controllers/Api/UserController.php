@@ -24,4 +24,42 @@ class UserController extends Controller
             'message' => 'OK'
         ]);
     }
+
+    public function filterCandidates(Request $request) {
+        $candidates = $this->UserService->filterCandidates($request);
+
+        return response([
+            'data' => $candidates,
+            'status' => 200,
+            'message' => 'OK'
+        ]);;
+    }
+
+    public function getFindingJobUser(Request $request) {
+        $candidates = $this->UserService->getFindingJobUser($request);
+
+        return response([
+            'data' => $candidates,
+            'status' => 200,
+            'message' => 'OK'
+        ]);;
+    }
+
+    public function toggleIsFindingJob(Request $request, User $user) {
+        if ( isset($request->user_id) ) {
+            $user = User::findOrFail($request->user_id);
+            $this->UserService->toggleIsFindingJob($user);
+            return response([
+                'status' => 200,
+                'message' => 'OK'
+            ]);
+        } else {
+            return response([
+                'status' => 404,
+                'message' => 'Error'
+            ]);
+        }
+
+    }
+
 }

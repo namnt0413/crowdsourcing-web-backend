@@ -28,6 +28,7 @@ class ApplyRequest extends FormRequest
         return [
             'user_id'  => 'required',
             'job_id'      => 'required',
+            'file_url'      => 'nullable|string',
             'date'     => 'required|date|after:today',
         ];
     }
@@ -37,6 +38,7 @@ class ApplyRequest extends FormRequest
         return [
             'user_id.required'        => 'Vui lòng đăng nhập trước khi ứng tuyển',
             'job_id.required'        => 'Công việc ứng tuyển không được phép để trống',
+            'file_url.string'        => 'Link khong hop le',
             'deadline.required'     => 'Deadline ứng tuyển không được phép để trống',
             'deadline.date'         => 'Tên không được phép để trống',
             'deadline.after:today'  => 'Deadline ứng tuyển không được kết thúc trước hôm nay',
