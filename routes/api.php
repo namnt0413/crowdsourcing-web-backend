@@ -11,6 +11,14 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\BookmarkController;
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
+use App\Http\Controllers\CompanyAuth\CompanyAuthController;
+use App\Http\Controllers\CompanyAuth\CompanyForgotPasswordController;
+use App\Http\Controllers\CompanyAuth\CompanyResetPasswordController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,12 +30,27 @@ use App\Http\Controllers\Api\BookmarkController;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('login', [AuthController::class,'login']);
+Route::post('register', [AuthController::class,'register']);
 
-Route::middleware(['auth:company'])->get('/company', function (Request $request) {
-    return $request->user();
+Route::post('company-login', [CompanyAuthController::class,'login']);
+Route::post('company-register', [CompanyAuthController::class,'register']);
+
+Route::group(['middleware' => 'api'], function(){
+    Route::post('logout',  [AuthController::class,'logout']);
+    Route::post('refresh',  [AuthController::class,'refresh']);
+    Route::post('me',  [AuthController::class,'me']);
+    Route::get('user', [AuthController::class,'user']);
+
+    Route::post('forgot-password',  [ForgotPasswordController::class,'sendEmail']);
+    Route::post('reset-password', [ResetPasswordController::class,'passwordResetProcess']);
+
+    Route::post('company-logout',  [CompanyAuthController::class,'logout']);
+    Route::post('company-refresh',  [CompanyAuthController::class,'refresh']);
+    Route::get('company', [CompanyAuthController::class,'company']);
+
+    Route::post('company-forgot-password',  [CompanyForgotPasswordController::class,'sendEmail']);
+    Route::post('company-reset-password', [CompanyResetPasswordController::class,'passwordResetProcess']);
 });
 
 Route::group([ 'as' => ''], function () {
