@@ -104,6 +104,7 @@ Route::group([ 'as' => ''], function () {
     Route::name('company.')->prefix('company')->group(function () {
         Route::put('/update-info', [CompanyController::class, 'updateInfo']);
         Route::get('/get-all-companies', [CompanyController::class, 'getAllCompanies']);
+        Route::get('/detail/{id}', [CompanyController::class, 'detail'])->name('detail');
     });
 
     //Bookmark

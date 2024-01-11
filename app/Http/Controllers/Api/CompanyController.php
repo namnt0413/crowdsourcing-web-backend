@@ -44,4 +44,13 @@ class CompanyController extends Controller
         }
     }
 
+    public function detail($id)
+    {
+        $company = $this->CompanyService->detailCompany($id);
+        return response([
+            'data' => $company,
+            'message' => 'OK'
+        ],200);
+    }
+
 }
