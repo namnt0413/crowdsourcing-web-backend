@@ -62,21 +62,18 @@ class JobController extends Controller
             if( $company->can('delete', $job)) {
                 $job->delete();
                 return response([
-                    'status' => 200,
                     'message' => 'OK'
-                ]);
+                ], 200);
             } else {
                 return response([
-                    'status' => 404,
                     'message' => 'Do not have permission'
-                ]);
+                ], 404);
             }
 
         } else {
             return response([
-                'status' => 404,
                 'message' => 'Please sign in/up company account to do this action'
-            ]);
+            ], 400);
         }
 
     }
@@ -86,9 +83,8 @@ class JobController extends Controller
         $job = $this->jobService->detailJob($id);
         return response([
             'data' => $job,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function getAllJobs()
@@ -96,9 +92,8 @@ class JobController extends Controller
         $jobs = $this->jobService->getAllJobs();
         return response([
             'data' => $jobs,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function getCompanyJobs(Request $request, $company_id)
@@ -106,9 +101,8 @@ class JobController extends Controller
         $jobs = $this->jobService->getCompanyJobs($company_id, $request);
         return response([
             'data' => $jobs,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function filterJobs(Request $request)
@@ -117,9 +111,8 @@ class JobController extends Controller
 
         return response([
             'data' => $jobs,
-            'status' => 200,
             'message' => 'OK'
-        ]);;
+        ], 200);
     }
 
     public function toggleStatusJob(Request $request)

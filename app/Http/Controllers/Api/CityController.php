@@ -92,9 +92,8 @@ class CityController extends Controller
     {
         $city->update($request->validated());
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -107,8 +106,7 @@ class CityController extends Controller
     {
         $city->delete();
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 }

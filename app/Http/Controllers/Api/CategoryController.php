@@ -25,9 +25,8 @@ class CategoryController extends Controller
         $cities = Category::all();
         return response([
             'data' => $cities,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -39,9 +38,8 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -54,9 +52,8 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -92,9 +89,8 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -107,8 +103,7 @@ class CategoryController extends Controller
     {
         $category->delete();
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 }
