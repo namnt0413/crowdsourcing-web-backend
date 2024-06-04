@@ -21,7 +21,7 @@ return new class extends Migration
             $table->longText('requirement');
             $table->integer('company_id');
             $table->integer('category_id');
-            $table->integer('position_id');
+            $table->integer('position_id')->nullable();
             $table->integer('city_id');
             $table->tinyInteger('status')->default('1');
             $table->datetime('deadline');

@@ -57,15 +57,13 @@ class ApplyController extends Controller
                 ->send(new ApplyMail($candidate->name,$applyJob->title));
 
             return response([
-                'status' => 200,
-                'message' => 'OK'
-            ]);
+                'message' => 'Apply job successfully'
+            ],200);
         } else {
             return response([
                 'todayApply' => $todayApply,
-                'status' => 404,
                 'message' => 'Apply to job failed.'
-            ]);
+            ], 400);
         }
     }
 

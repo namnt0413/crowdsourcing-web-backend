@@ -108,7 +108,7 @@ CREATE TABLE `jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `budget` bigint(20) UNSIGNED NOT NULL,
+  `salary` bigint(20) UNSIGNED NOT NULL,
   `requirement` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `company_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
