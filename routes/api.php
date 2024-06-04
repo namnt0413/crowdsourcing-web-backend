@@ -81,6 +81,7 @@ Route::group([ 'as' => ''], function () {
         Route::get('get-company-jobs/{company_id}', [JobController::class, 'getCompanyJobs']);
         Route::get('filter-jobs', [JobController::class, 'filterJobs']);
         Route::put('/toggle-status-job', [JobController::class, 'toggleStatusJob']);
+        Route::delete('/deleteJobs', [JobController::class, 'deleteJobs'])->name('deleteJobs');
     });
 
     //Apply
