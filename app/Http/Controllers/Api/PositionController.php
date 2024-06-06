@@ -25,9 +25,8 @@ class PositionController extends Controller
         $positions = Position::all();
         return response([
             'data' => $positions,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -39,9 +38,8 @@ class PositionController extends Controller
     {
         Position::create($request->validated());
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -54,9 +52,8 @@ class PositionController extends Controller
     {
         Position::create($request->validated());
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 20);
     }
 
     /**
@@ -94,7 +91,7 @@ class PositionController extends Controller
         return response([
             'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     /**
@@ -107,8 +104,7 @@ class PositionController extends Controller
     {
         $position->delete();
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 }

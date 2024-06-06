@@ -31,4 +31,9 @@ class CompanyService
         return $companies;
     }
 
+    public function detailCompany($id) {
+        $company = Company::where(["id" => $id])->get();
+        return $company;
+    }
+
 }

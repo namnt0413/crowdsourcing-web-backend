@@ -29,14 +29,12 @@ class BookmarkController extends Controller
 
             Bookmark::create($request->validated());
             return response([
-                'status' => 200,
                 'message' => 'OK'
-            ]);
+            ], 200);
         } else {
             return response([
-                'status' => 404,
                 'message' => 'Bookmark user failed.'
-            ]);
+            ], 400);
         }
     }
 
@@ -45,16 +43,15 @@ class BookmarkController extends Controller
         try {
             Bookmark::find($id)->delete();
             return response([
-                'status' => 200,
                 'message' => 'OK'
-            ]);
+            ], 200);
 
         } catch (\Exception $exception) {
             Log::error('Message: ' . $exception->getMessage() . ' --- Line : ' . $exception->getLine());
             return response()->json([
                 'code' => 500,
                 'message' => 'delete failed'
-            ], 500);
+            ], 400);
         }
 
     }
@@ -66,9 +63,8 @@ class BookmarkController extends Controller
         ->get();
         return response([
             'data' => $listCandidates,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
 }

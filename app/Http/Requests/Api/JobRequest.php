@@ -28,13 +28,17 @@ class JobRequest extends FormRequest
         return [
             'title'        => 'required|max:255',
             'description'  => 'required',
-            'budget'       => 'required|integer|min:0',
+            'salary'       => 'required|integer|min:0',
             'requirement'  => 'required',
             'company_id'   => 'required',
             'category_id'  => 'required',
-            'position_id'  => 'required',
+            'position_id'  => '',
             'city_id'      => 'required',
             'deadline'     => 'required|date|after:tomorrow',
+            'right'        => 'required',
+            'exp'          => 'required',
+            'address'      => 'required',
+            'max_salary'   => '',
         ];
     }
 
@@ -43,15 +47,16 @@ class JobRequest extends FormRequest
         return [
             'title.required'        => 'Tiêu đề công việc không được phép để trống',
             'description.required'  => 'Mô tả không được phép để trống',
-            'budget.required'       => 'Mức lương không được phép để trống',
-            'budget.integer'        => 'Mức lương phải là một số',
-            'budget.min:0'          => 'Mức lương cần phải lớn hơn 0',
+            'salary.required'       => 'Mức lương không được phép để trống',
+            'salary.integer'        => 'Mức lương phải là một số',
+            'salary.min:0'          => 'Mức lương cần phải lớn hơn 0',
             'requirement.required'  => 'Yêu cầu công việc không được phép để trống',
             'company_id.required'   => 'Tên không được phép để trống',
             'category_id.required'  => 'Tên không được phép để trống',
-            'position_id.required'  => 'Tên không được phép để trống',
             'city_id.required'      => 'Tên không được phép để trống',
-            'title.required'        => 'Tên không được phép để trống',
+            'right.required'        => 'Tên không được phép để trống',
+            'exp.required'        => 'Tên không được phép để trống',
+            'address.required'        => 'Tên không được phép để trống',
             'deadline.required'     => 'Deadline ứng tuyển không được phép để trống',
             'deadline.date'         => 'Tên không được phép để trống',
             'deadline.after:tomorrow'  => 'Deadline ứng tuyển không được kết thúc trước hôm nay',
@@ -62,10 +67,10 @@ class JobRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
 
-            'success'   => false,
+            'status'   => false,
             'message'   => 'Validation errors',
             'data'      => $validator->errors()
-        ]));
+        ],400));
     }
 
 }

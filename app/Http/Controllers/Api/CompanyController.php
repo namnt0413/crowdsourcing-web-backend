@@ -22,9 +22,8 @@ class CompanyController extends Controller
         $company = Company::findOrFail($request->company_id);
         $this->CompanyService->edit($request, $company);
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function getAllCompanies ()
@@ -33,15 +32,22 @@ class CompanyController extends Controller
         if ( $companies ) {
             return response([
                 'data' => $companies,
-                'status' => 200,
                 'message' => 'OK'
-            ]);
+            ], 200);
         } else {
             return response([
-                'status' => 404,
                 'message' => 'Error'
-            ]);
+            ], 400);
         }
+    }
+
+    public function detail($id)
+    {
+        $company = $this->CompanyService->detailCompany($id);
+        return response([
+            'data' => $company,
+            'message' => 'OK'
+        ],200);
     }
 
 }

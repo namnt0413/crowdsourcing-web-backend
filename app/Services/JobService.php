@@ -18,7 +18,7 @@ class JobService
         return $job->update([
             'title'         => $request->title,
             'description'   => $request->description,
-            'budget'        => $request->budget,
+            'salary'        => $request->salary,
             'requirement'   => $request->requirement,
             'category_id'   => $request->category_id,
             'position_id'   => $request->position_id,

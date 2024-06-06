@@ -20,9 +20,8 @@ class UserController extends Controller
         $user = User::findOrFail($request->user_id);
         $this->UserService->edit($request, $user);
         return response([
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ],200 );
     }
 
     public function filterCandidates(Request $request) {
@@ -30,9 +29,8 @@ class UserController extends Controller
 
         return response([
             'data' => $candidates,
-            'status' => 200,
             'message' => 'OK'
-        ]);;
+        ], 200);
     }
 
     public function getFindingJobUser(Request $request) {
@@ -40,9 +38,8 @@ class UserController extends Controller
 
         return response([
             'data' => $candidates,
-            'status' => 200,
             'message' => 'OK'
-        ]);;
+        ], 200);
     }
 
     public function toggleIsFindingJob(Request $request, User $user) {
@@ -50,14 +47,12 @@ class UserController extends Controller
             $user = User::findOrFail($request->user_id);
             $this->UserService->toggleIsFindingJob($user);
             return response([
-                'status' => 200,
                 'message' => 'OK'
-            ]);
+            ],200);
         } else {
             return response([
-                'status' => 404,
                 'message' => 'Error'
-            ]);
+            ],400);
         }
 
     }

@@ -17,21 +17,6 @@ use Carbon\Carbon;
 
 class ApplyController extends Controller
 {
-    // public function sendEmail(Request $request)  // Send email function
-    // {
-    //     if (!$this->validateEmail($request->email)) {  // check if exist email
-    //         return $this->failedResponse();
-    //     }
-    //     $this->send($request->email);  // create token and send mail
-    //     return $this->successResponse();
-    // }
-
-    // public function send($email)
-    // {
-    //     $token = $this->createToken($email);
-    //     Mail::to($email)->send(new ForgotPasswordMail($token, $email));  // reset token
-    // }
-
     public function create(ApplyRequest $request)
     {
         $todayApply = DB::table('applies')
@@ -48,7 +33,6 @@ class ApplyController extends Controller
 
         $applyJob = Job::where([ 'id' => $request->job_id])->with('company')->first();
         $checkDeadline = ($request->date < $applyJob->deadline);
-        // dd($request->date < $applyJob->deadline );
 
         if( $todayApply->count < 5 && !isset($checkExist) && $checkDeadline ) {     // max times apply job in a day is 5
             Apply::create($request->validated());
@@ -57,15 +41,13 @@ class ApplyController extends Controller
                 ->send(new ApplyMail($candidate->name,$applyJob->title));
 
             return response([
-                'status' => 200,
-                'message' => 'OK'
-            ]);
+                'message' => 'Apply job successfully'
+            ],200);
         } else {
             return response([
                 'todayApply' => $todayApply,
-                'status' => 404,
                 'message' => 'Apply to job failed.'
-            ]);
+            ], 400);
         }
     }
 
@@ -74,16 +56,14 @@ class ApplyController extends Controller
         try {
             Apply::find($id)->delete();
             return response([
-                'status' => 200,
                 'message' => 'OK'
-            ]);
+            ], 200);
 
         } catch (\Exception $exception) {
             Log::error('Message: ' . $exception->getMessage() . ' --- Line : ' . $exception->getLine());
             return response()->json([
-                'code' => 500,
                 'message' => 'delete failed'
-            ], 500);
+            ], 400);
         }
 
     }
@@ -94,12 +74,10 @@ class ApplyController extends Controller
         ->whereRaw( 'deleted_at IS NULL')
         ->with('job','user')
         ->get();
-        // dd($jobApplies);
         return response([
             'data' => $jobApplies,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function listByCompany($company_id)
@@ -109,9 +87,8 @@ class ApplyController extends Controller
         ->whereRaw( 'deleted_at IS NULL')->get();
         return response([
             'data' => $companyApplies,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function listByUser($user_id)
@@ -122,9 +99,8 @@ class ApplyController extends Controller
         ->get();
         return response([
             'data' => $userApplies,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
 }

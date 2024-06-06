@@ -8,13 +8,15 @@ use App\Http\Requests\Api\JobRequest;
 use App\Models\Job;
 use App\Services\JobService;
 use App\Services\CompanyService;
+use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
 
     private $jobService;
 
-    public function __construct( JobService $jobService , CompanyService $companyService ){
+    public function __construct(JobService $jobService, CompanyService $companyService)
+    {
         $this->jobService = $jobService;
         $this->companyService = $companyService;
     }
@@ -31,9 +33,9 @@ class JobController extends Controller
     public function edit(Request $request, $id)
     {
         $job = $this->jobService->findOrFailById($id);
-        if( $request->company_id != '' ) {
+        if ($request->company_id != '') {
             $company = $this->companyService->findOrFailById($request->company_id);
-            if( $company->can('edit', $job)) {
+            if ($company->can('edit', $job)) {
                 $this->jobService->edit($request, $job);
                 return response([
                     'status' => 200,
@@ -57,26 +59,23 @@ class JobController extends Controller
     public function delete(Request $request, $id)
     {
         $job = $this->jobService->findOrFailById($id);
-        if( $request->company_id != '' ) {
+        if ($request->company_id != '') {
             $company = $this->companyService->findOrFailById($request->company_id);
-            if( $company->can('delete', $job)) {
+            if ($company->can('delete', $job)) {
                 $job->delete();
                 return response([
-                    'status' => 200,
                     'message' => 'OK'
-                ]);
+                ], 200);
             } else {
                 return response([
-                    'status' => 404,
                     'message' => 'Do not have permission'
-                ]);
+                ], 404);
             }
 
         } else {
             return response([
-                'status' => 404,
                 'message' => 'Please sign in/up company account to do this action'
-            ]);
+            ], 400);
         }
 
     }
@@ -86,9 +85,8 @@ class JobController extends Controller
         $job = $this->jobService->detailJob($id);
         return response([
             'data' => $job,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function getAllJobs()
@@ -96,9 +94,8 @@ class JobController extends Controller
         $jobs = $this->jobService->getAllJobs();
         return response([
             'data' => $jobs,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function getCompanyJobs(Request $request, $company_id)
@@ -106,9 +103,8 @@ class JobController extends Controller
         $jobs = $this->jobService->getCompanyJobs($company_id, $request);
         return response([
             'data' => $jobs,
-            'status' => 200,
             'message' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function filterJobs(Request $request)
@@ -117,14 +113,13 @@ class JobController extends Controller
 
         return response([
             'data' => $jobs,
-            'status' => 200,
             'message' => 'OK'
-        ]);;
+        ], 200);
     }
 
     public function toggleStatusJob(Request $request)
     {
-        if ( isset($request->job_id) ) {
+        if (isset($request->job_id)) {
             $job = Job::findOrFail($request->job_id);
             $this->jobService->toggleStatusJob($job);
             return response([
@@ -137,5 +132,33 @@ class JobController extends Controller
                 'message' => 'Error'
             ]);
         }
+    }
+
+    public function deleteJobs(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'jobIds' => 'required|array',
+            'jobIds.*' => 'integer|exists:jobs,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid input',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Get the job IDs from the request
+        $jobIds = $request->input('jobIds');
+
+        // Delete the jobs
+        Job::whereIn('id', $jobIds)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tasks deleted successfully',
+        ]);
     }
 }
