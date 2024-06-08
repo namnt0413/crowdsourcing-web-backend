@@ -120,7 +120,15 @@ Route::group([ 'as' => ''], function () {
     Route::name('cv.')->prefix('cv')->group(function () {
         Route::post('/create', [CVController::class, 'create']);
         Route::get('/detail/{id}', [CVController::class, 'detail'])->name('detail');
+        // update basic info
+        Route::put('/update-title/{id}', [CVController::class, 'updateTitle'])->name('updateTitle');
         Route::put('/update-name/{id}', [CVController::class, 'updateName'])->name('updateName');
+        Route::put('/update-position/{id}', [CVController::class, 'updatePosition'])->name('updatePosition');
+        Route::put('/update-email/{id}', [CVController::class, 'updateEmail'])->name('updateEmail');
+        Route::put('/update-birthday/{id}', [CVController::class, 'updateBirthday'])->name('updateBirthday');
+        Route::put('/update-phone/{id}', [CVController::class, 'updatePhone'])->name('updatePhone');
+        Route::put('/update-address/{id}', [CVController::class, 'updateAddress'])->name('updateAddress');
+
     });
 
 });

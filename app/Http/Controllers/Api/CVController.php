@@ -19,21 +19,72 @@ class CVController extends Controller
     public function updateName(Request $request, $id) {
         $cv = CV::findOrFail($id);
         $cv->update([
-            'name' => $request->name,
+            'name' => $request->field,
         ]);
         return response([
             'message' => 'OK'
         ], 200);
     }
-    // public function updateName() {
 
-    // }
-    // public function updateName() {
+    public function updateTitle(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'title' => $request->field,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
 
-    // }
-    // public function updateName() {
+    public function updatePosition(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'position' => $request->field,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
 
-    // }
+    public function updateEmail(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'email' => $request->field,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updatePhone(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'phone' => $request->field,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updateBirthday(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'birthday' => $request->field,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updateAddress(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'address' => $request->field,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
 
     public function detail($id)
     {
