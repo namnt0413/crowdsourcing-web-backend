@@ -19,7 +19,7 @@ class CVController extends Controller
     public function updateName(Request $request, $id) {
         $cv = CV::findOrFail($id);
         $cv->update([
-            'name' => $request->field,
+            'name' => $request->name,
         ]);
         return response([
             'message' => 'OK'
@@ -89,6 +89,7 @@ class CVController extends Controller
     public function detail($id)
     {
         $cv = CV::where(["id" => $id])->first();
+        // dd($cv);
         return response([
             'data' => $cv,
             'message' => 'OK'
