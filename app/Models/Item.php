@@ -11,4 +11,10 @@ class Item extends Model
 
     protected $guarded = ['id','created_at','updated_at'];
     protected $table = 'items';
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
+
 }

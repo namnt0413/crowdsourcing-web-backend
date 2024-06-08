@@ -13,7 +13,13 @@ class Subject extends Model
 
     protected $table = 'subjects';
 
-    protected $casts = [
-        'offset' => 'array',
-    ];
+    public function cv()
+    {
+        return $this->belongsTo(CV::class);
+    }
+
+    public function item()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

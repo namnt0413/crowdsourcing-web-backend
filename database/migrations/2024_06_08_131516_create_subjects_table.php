@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('cv_id');
+            $table->integer('c_v_id');
             $table->string('offset')->nullable();
             $table->timestamps();
         });

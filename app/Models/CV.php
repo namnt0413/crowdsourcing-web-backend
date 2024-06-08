@@ -14,7 +14,13 @@ class CV extends Model
 
     protected $table = 'cvs';
 
-    protected $casts = [
-        'offset' => 'array',
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function subject()
+    {
+        return $this->hasMany(Subject::class);
+    }
 }

@@ -12,7 +12,17 @@ class ItemController extends Controller
     public function create(ItemRequest $request) {
         Item::create($request->validated());
         return response([
-            'message' => 'create new subject success'
+            'message' => 'create new item success'
+        ], 200);
+    }
+
+    public function detail($id)
+    {
+        $item = Item::where(["id" => $id])->first();
+        // dd($cv);
+        return response([
+            'data' => $item,
+            'message' => 'OK'
         ], 200);
     }
 

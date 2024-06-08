@@ -88,13 +88,12 @@ class CVController extends Controller
 
     public function detail($id)
     {
-        $cv = CV::where(["id" => $id])->first();
-        // dd($cv);
+        $cv = CV::where(["id" => $id])->with('subject')->first();
+
         return response([
             'data' => $cv,
             'message' => 'OK'
         ], 200);
     }
-
 
 }

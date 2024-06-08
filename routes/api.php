@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\BookmarkController;
 use App\Http\Controllers\Api\CVController;
+use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\ItemController;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -128,7 +130,18 @@ Route::group([ 'as' => ''], function () {
         Route::put('/update-birthday/{id}', [CVController::class, 'updateBirthday'])->name('updateBirthday');
         Route::put('/update-phone/{id}', [CVController::class, 'updatePhone'])->name('updatePhone');
         Route::put('/update-address/{id}', [CVController::class, 'updateAddress'])->name('updateAddress');
+    });
 
+    //Subject
+    Route::name('subject.')->prefix('subject')->group(function () {
+        Route::post('/create', [SubjectController::class, 'create']);
+        Route::get('/detail/{id}', [SubjectController::class, 'detail'])->name('detail');
+    });
+
+    //Item
+    Route::name('item.')->prefix('item')->group(function () {
+        Route::post('/create', [ItemController::class, 'create']);
+        Route::get('/detail/{id}', [ItemController::class, 'detail'])->name('detail');
     });
 
 });

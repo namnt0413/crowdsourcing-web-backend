@@ -26,7 +26,20 @@ class ItemRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => '',
+            'content' => 'required',
+            'type' => '',
+            'c_v_id' => 'required|integer',
+            'subject_id' => 'required|integer',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'content.required' => 'Tên không được phép để trống',
+            'c_v_id.required' => 'Tên không được phép để trống',
+            'subject_id.required' => 'Tên không được phép để trống',
         ];
     }
 

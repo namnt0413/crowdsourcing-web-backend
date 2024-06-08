@@ -17,9 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->longText('content');
-            $table->string('offset')->nullable();
             $table->tinyInteger('type')->default(1);
-            $table->integer('cv_id');
+            $table->integer('c_v_id');
             $table->integer('subject_id');
             $table->timestamps();
         });

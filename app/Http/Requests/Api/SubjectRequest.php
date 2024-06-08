@@ -27,9 +27,16 @@ class SubjectRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'cv_id' => 'required|integer',
+            'c_v_id' => 'required|integer',
             'offset' => '',
-            'text_font' => '',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'Tên không được phép để trống',
+            'c_v_id.required' => 'Tên không được phép để trống',
         ];
     }
 

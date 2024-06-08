@@ -17,4 +17,14 @@ class SubjectController extends Controller
         ], 200);
     }
 
+    public function detail($id)
+    {
+        $subject = Subject::where(["id" => $id])->first();
+        // dd($cv);
+        return response([
+            'data' => $subject,
+            'message' => 'OK'
+        ], 200);
+    }
+
 }
