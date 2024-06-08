@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApplyController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\BookmarkController;
+use App\Http\Controllers\Api\CVController;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -115,5 +116,11 @@ Route::group([ 'as' => ''], function () {
         Route::get('/list-candidates/{company_id}', [BookmarkController::class, 'listCandidates']);
     });
 
+    //CV
+    Route::name('cv.')->prefix('cv')->group(function () {
+        Route::post('/create', [CVController::class, 'create']);
+        Route::get('/detail/{id}', [CVController::class, 'detail'])->name('detail');
+        Route::put('/update-name/{id}', [CVController::class, 'updateName'])->name('updateName');
+    });
 
 });
