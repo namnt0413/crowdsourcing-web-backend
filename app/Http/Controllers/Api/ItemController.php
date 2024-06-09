@@ -19,9 +19,28 @@ class ItemController extends Controller
     public function detail($id)
     {
         $item = Item::where(["id" => $id])->first();
-        // dd($cv);
         return response([
             'data' => $item,
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updateItemTitle(Request $request, $id) {
+        $item = Item::findOrFail($id);
+        $item->update([
+            'title' => $request->title,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updateItemContent(Request $request, $id) {
+        $item = Item::findOrFail($id);
+        $item->update([
+            'content' => $request->content,
+        ]);
+        return response([
             'message' => 'OK'
         ], 200);
     }

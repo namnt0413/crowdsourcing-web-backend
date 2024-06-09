@@ -27,4 +27,14 @@ class SubjectController extends Controller
         ], 200);
     }
 
+    public function updateSubjectTitle(Request $request, $id) {
+        $subject = Subject::findOrFail($id);
+        $subject->update([
+            'title' => $request->title,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
 }
