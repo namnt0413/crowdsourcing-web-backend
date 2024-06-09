@@ -96,4 +96,14 @@ class CVController extends Controller
         ], 200);
     }
 
+    public function updateOffset(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'offset' => $request->offset,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
 }

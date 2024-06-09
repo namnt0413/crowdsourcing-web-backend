@@ -130,6 +130,7 @@ Route::group([ 'as' => ''], function () {
         Route::put('/update-birthday/{id}', [CVController::class, 'updateBirthday'])->name('updateBirthday');
         Route::put('/update-phone/{id}', [CVController::class, 'updatePhone'])->name('updatePhone');
         Route::put('/update-address/{id}', [CVController::class, 'updateAddress'])->name('updateAddress');
+        Route::put('/update-offset/{id}', [CVController::class, 'updateOffset'])->name('updateOffset');
     });
 
     //Subject
@@ -138,6 +139,7 @@ Route::group([ 'as' => ''], function () {
         Route::get('/detail/{id}', [SubjectController::class, 'detail'])->name('detail');
         Route::put('/update-title/{id}', [SubjectController::class, 'updateSubjectTitle'])->name('updateSubjectTitle');
         Route::put('/update-offset/{id}', [SubjectController::class, 'updateOffset'])->name('updateOffset');
+        Route::delete('/delete/{id}', [SubjectController::class, 'delete']);
     });
 
     //Item

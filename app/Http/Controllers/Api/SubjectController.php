@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\DB;
 class SubjectController extends Controller
 {
     public function create(SubjectRequest $request) {
-        Subject::create($request->validated());
+        $newSubject = Subject::create($request->validated());
         return response([
+            "subject" => $newSubject,
             'message' => 'create new subject success'
         ], 200);
     }
@@ -45,6 +46,27 @@ class SubjectController extends Controller
         return response([
             'message' => 'OK'
         ], 200);
+    }
+
+    public function delete($id)
+    {
+        try {
+            $subject = Subject::find($id);
+            if(isset($subject->items)) {
+                $subject->items()->delete();
+            }
+            $subject->delete();
+            return response([
+                'message' => 'OK'
+            ], 200);
+
+        } catch (\Exception $exception) {
+            Log::error('Message: ' . $exception->getMessage() . ' --- Line : ' . $exception->getLine());
+            return response()->json([
+                'code' => 500,
+                'message' => 'delete failed'
+            ], 400);
+        }
     }
 
 }
