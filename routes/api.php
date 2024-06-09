@@ -137,6 +137,7 @@ Route::group([ 'as' => ''], function () {
         Route::post('/create', [SubjectController::class, 'create']);
         Route::get('/detail/{id}', [SubjectController::class, 'detail'])->name('detail');
         Route::put('/update-title/{id}', [SubjectController::class, 'updateSubjectTitle'])->name('updateSubjectTitle');
+        Route::put('/update-offset/{id}', [SubjectController::class, 'updateOffset'])->name('updateOffset');
     });
 
     //Item
@@ -145,6 +146,7 @@ Route::group([ 'as' => ''], function () {
         Route::get('/detail/{id}', [ItemController::class, 'detail'])->name('detail');
         Route::put('/update-title/{id}', [ItemController::class, 'updateItemTitle'])->name('updateItemTitle');
         Route::put('/update-content/{id}', [ItemController::class, 'updateItemContent'])->name('updateItemContent');
+        Route::delete('/delete/{id}', [ItemController::class, 'delete']);
     });
 
 });

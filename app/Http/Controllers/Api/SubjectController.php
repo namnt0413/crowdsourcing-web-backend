@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\SubjectRequest;
 use App\Models\Subject;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
@@ -19,8 +20,7 @@ class SubjectController extends Controller
 
     public function detail($id)
     {
-        $subject = Subject::where(["id" => $id])->first();
-        // dd($cv);
+        $subject = Subject::where(["id" => $id])->with('item')->first();
         return response([
             'data' => $subject,
             'message' => 'OK'
@@ -31,6 +31,16 @@ class SubjectController extends Controller
         $subject = Subject::findOrFail($id);
         $subject->update([
             'title' => $request->title,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updateOffset(Request $request, $id) {
+        $subject = Subject::findOrFail($id);
+        $subject->update([
+            'offset' => $request->offset,
         ]);
         return response([
             'message' => 'OK'
