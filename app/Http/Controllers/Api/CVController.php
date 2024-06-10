@@ -87,6 +87,15 @@ class CVController extends Controller
             'message' => 'OK'
         ], 200);
     }
+    public function updateThemeColor(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'theme_color' => $request->theme_color,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
 
     public function detail($id)
     {

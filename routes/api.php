@@ -134,6 +134,7 @@ Route::group([ 'as' => ''], function () {
         Route::put('/update-phone/{id}', [CVController::class, 'updatePhone'])->name('updatePhone');
         Route::put('/update-address/{id}', [CVController::class, 'updateAddress'])->name('updateAddress');
         Route::put('/update-offset/{id}', [CVController::class, 'updateOffset'])->name('updateOffset');
+        Route::put('/update-theme-color/{id}', [CVController::class, 'updateThemeColor'])->name('updateThemeColor');
     });
 
     //Subject
