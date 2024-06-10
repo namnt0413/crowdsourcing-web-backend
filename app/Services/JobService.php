@@ -86,4 +86,118 @@ class JobService
         }
     }
 
+
+    ///////// Recommend jobs handle ////////////
+    private function calculateSuitability($candidateData, $job)
+    {
+        $locationMatch = $this->calculateLocationMatch($candidateData['city'], $job["city"]);
+        $salaryMatch = $this->calculateSalaryMatch($candidateData['salary'], $job["salary"], $job["max_salary"]);
+        $experienceMatch = $this->calculateExperienceMatch($candidateData['exp'], $job["exp"]);
+        $fieldMatch = $this->calculateFieldMatch($candidateData['category'], $job["category_id"]);
+
+        $totalMatchScore = ($locationMatch + $salaryMatch + $experienceMatch + $fieldMatch) / 4;
+
+        return $totalMatchScore;
+    }
+
+    private function calculateLocationMatch($candidateLocation, $jobLocation)
+    {
+        $jobLocations = array_map('intval', explode(',', $jobLocation));
+        return in_array($candidateLocation, $jobLocations) ? 1 : 0;
+    }
+
+    private function calculateSalaryMatch($candidateSalaryRange, $jobSalary, $jobMaxSalary = null)
+    {
+        $salaryRanges = [
+            1 => [0, 5000000],
+            2 => [5000000, 10000000],
+            3 => [10000000, 15000000],
+            4 => [15000000, 20000000],
+            5 => [20000000, 25000000],
+            6 => [25000000, 30000000],
+            7 => [30000000, 50000000],
+            8 => [50000000, 1000000000],
+        ];
+
+        $range1 = $salaryRanges[$candidateSalaryRange];
+        $range2 = $jobMaxSalary ? [$jobSalary, $jobMaxSalary] : [$jobSalary, $jobSalary];
+
+        return $this->calculateOverlap($range1, $range2);
+    }
+
+    private function calculateExperienceMatch($candidateExperience, $jobExperienceRequired)
+    {
+        $maxDifference = abs($candidateExperience - $jobExperienceRequired);
+        $matchScore = 1 - $maxDifference / 6;
+
+        return max($matchScore, 0);
+    }
+
+    private function calculateFieldMatch($candidateDesiredFields, $jobField)
+    {
+        $desiredFields = explode(',', $candidateDesiredFields);
+        $jobFields = explode(',', $jobField);
+
+        foreach ($desiredFields as $desiredField) {
+            if (in_array($desiredField, $jobFields)) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    private function calculateOverlap($range1, $range2)
+    {
+        $start = max($range1[0], $range2[0]);
+        $end = min($range1[1], $range2[1]);
+
+        if ($start < $end) {
+            // Tính toán sự trùng lặp
+            $overlap = $end - $start;
+            $maxRange = max($range1[1] - $range1[0], $range2[1] - $range2[0]);
+            return $overlap / $maxRange;
+        } else {
+            // Không có sự trùng lặp, tính khoảng cách giữa các khoảng
+            $distance = max($range1[0], $range2[0]) - min($range1[1], $range2[1]);
+            $maxRangeLength = max($range1[1] - $range1[0], $range2[1] - $range2[0]);
+
+            // Tính điểm tương đồng dựa trên hàm Gaussian
+            $sigma = $maxRangeLength / 2;
+            $similarityScore = exp(-pow($distance, 2) / (2 * pow($sigma, 2)));
+
+            return $similarityScore;
+        }
+    }
+
+    public function recommendJobs($request) {
+
+         // Nhận dữ liệu đầu vào từ request
+         $candidateData = $request->all();
+
+         // Truy vấn dữ liệu các công việc từ database
+        //  $jobs = Job::all();
+         $jobs = Job::where('status', 1)
+                 ->inRandomOrder()
+                 ->with("company")
+                 ->take(50)
+                 ->get();
+
+         // Tính toán mức độ phù hợp của các công việc với ứng viên bằng fuzzy logic
+         $recommendedJobs = [];
+         foreach ($jobs as $job) {
+             $suitabilityScore = $this->calculateSuitability($candidateData, $job);
+             $jobArray = $job->toArray();
+             $jobArray['suitability_score'] = $suitabilityScore;
+             $recommendedJobs[] = $jobArray;
+         }
+         // Sắp xếp danh sách công việc theo mức độ phù hợp giảm dần
+         usort($recommendedJobs, function ($a, $b) {
+             if ($a['suitability_score'] === $b['suitability_score']) {
+                 return 0;
+             }
+             return ($a['suitability_score'] > $b['suitability_score']) ? -1 : 1;
+         });
+         return $recommendedJobs;
+    }
+
 }

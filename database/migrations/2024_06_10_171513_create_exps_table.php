@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->string('category_id')->change();
-            $table->integer('exp_id');
+        Schema::create('exps', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -26,9 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->dropColumn('exp_id');
-            $table->integer('category_id')->change();
-        });
+        Schema::dropIfExists('exps');
     }
 };
