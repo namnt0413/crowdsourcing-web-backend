@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CV;
 use App\Http\Requests\Api\CVRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CVController extends Controller
 {
@@ -104,6 +105,43 @@ class CVController extends Controller
         return response([
             'message' => 'OK'
         ], 200);
+    }
+
+    public function getListCvs($id) {
+        $listCvs = CV::where('user_id', $id)->get();
+        return response([
+            'data' => $listCvs,
+            'message' => 'OK'
+        ], 200);
+    }
+
+    // deleteCvs
+    public function deleteCvs(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'cvIds' => 'required|array',
+            'cvIds.*' => 'integer|exists:cvs,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid input',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Get the job IDs from the request
+        $cvIds = $request->input('cvIds');
+
+        // Delete the jobs
+        $cv = CV::whereIn('id', $cvIds)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cv deleted successfully',
+        ]);
     }
 
 }

@@ -161,4 +161,5 @@ class JobController extends Controller
             'message' => 'Tasks deleted successfully',
         ]);
     }
+
 }

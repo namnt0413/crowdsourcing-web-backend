@@ -122,6 +122,9 @@ Route::group([ 'as' => ''], function () {
     Route::name('cv.')->prefix('cv')->group(function () {
         Route::post('/create', [CVController::class, 'create']);
         Route::get('/detail/{id}', [CVController::class, 'detail'])->name('detail');
+        Route::get('/get-list-cvs/{id}', [CVController::class, 'getListCvs'])->name('getListCvs');
+        Route::delete('/delete-cvs', [CVController::class, 'deleteCvs'])->name('deleteCvs');
+
         // update basic info
         Route::put('/update-title/{id}', [CVController::class, 'updateTitle'])->name('updateTitle');
         Route::put('/update-name/{id}', [CVController::class, 'updateName'])->name('updateName');
