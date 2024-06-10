@@ -10,6 +10,9 @@ use App\Http\Controllers\Api\ApplyController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\BookmarkController;
+use App\Http\Controllers\Api\CVController;
+use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\ItemController;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -115,5 +118,41 @@ Route::group([ 'as' => ''], function () {
         Route::get('/list-candidates/{company_id}', [BookmarkController::class, 'listCandidates']);
     });
 
+    //CV
+    Route::name('cv.')->prefix('cv')->group(function () {
+        Route::post('/create', [CVController::class, 'create']);
+        Route::get('/detail/{id}', [CVController::class, 'detail'])->name('detail');
+        Route::get('/get-list-cvs/{id}', [CVController::class, 'getListCvs'])->name('getListCvs');
+        Route::delete('/delete-cvs', [CVController::class, 'deleteCvs'])->name('deleteCvs');
+
+        // update basic info
+        Route::put('/update-title/{id}', [CVController::class, 'updateTitle'])->name('updateTitle');
+        Route::put('/update-name/{id}', [CVController::class, 'updateName'])->name('updateName');
+        Route::put('/update-position/{id}', [CVController::class, 'updatePosition'])->name('updatePosition');
+        Route::put('/update-email/{id}', [CVController::class, 'updateEmail'])->name('updateEmail');
+        Route::put('/update-birthday/{id}', [CVController::class, 'updateBirthday'])->name('updateBirthday');
+        Route::put('/update-phone/{id}', [CVController::class, 'updatePhone'])->name('updatePhone');
+        Route::put('/update-address/{id}', [CVController::class, 'updateAddress'])->name('updateAddress');
+        Route::put('/update-offset/{id}', [CVController::class, 'updateOffset'])->name('updateOffset');
+        Route::put('/update-theme-color/{id}', [CVController::class, 'updateThemeColor'])->name('updateThemeColor');
+    });
+
+    //Subject
+    Route::name('subject.')->prefix('subject')->group(function () {
+        Route::post('/create', [SubjectController::class, 'create']);
+        Route::get('/detail/{id}', [SubjectController::class, 'detail'])->name('detail');
+        Route::put('/update-title/{id}', [SubjectController::class, 'updateSubjectTitle'])->name('updateSubjectTitle');
+        Route::put('/update-offset/{id}', [SubjectController::class, 'updateOffset'])->name('updateOffset');
+        Route::delete('/delete/{id}', [SubjectController::class, 'delete']);
+    });
+
+    //Item
+    Route::name('item.')->prefix('item')->group(function () {
+        Route::post('/create', [ItemController::class, 'create']);
+        Route::get('/detail/{id}', [ItemController::class, 'detail'])->name('detail');
+        Route::put('/update-title/{id}', [ItemController::class, 'updateItemTitle'])->name('updateItemTitle');
+        Route::put('/update-content/{id}', [ItemController::class, 'updateItemContent'])->name('updateItemContent');
+        Route::delete('/delete/{id}', [ItemController::class, 'delete']);
+    });
 
 });
