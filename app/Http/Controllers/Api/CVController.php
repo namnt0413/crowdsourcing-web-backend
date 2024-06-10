@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Validator;
 class CVController extends Controller
 {
     public function create(CVRequest $request) {
-        CV::create($request->validated());
+        $newCv = CV::create($request->validated());
         return response([
+            'cv' => $newCv,
             'message' => 'create new cv success'
         ], 200);
     }
