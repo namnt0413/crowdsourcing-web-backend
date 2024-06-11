@@ -90,10 +90,10 @@ class JobService
     ///////// Recommend jobs handle ////////////
     private function calculateSuitability($candidateData, $job)
     {
-        $locationMatch = $this->calculateLocationMatch($candidateData['city'], $job["city"]);
-        $salaryMatch = $this->calculateSalaryMatch($candidateData['salary'], $job["salary"], $job["max_salary"]);
-        $experienceMatch = $this->calculateExperienceMatch($candidateData['exp'], $job["exp"]);
-        $fieldMatch = $this->calculateFieldMatch($candidateData['category'], $job["category_id"]);
+        $locationMatch = $this->calculateLocationMatch($candidateData['city'] ?? null, $job["city_id"]);
+        $salaryMatch = $this->calculateSalaryMatch($candidateData['salary'] ?? null, $job["salary"], $job["max_salary"]);
+        $experienceMatch = $this->calculateExperienceMatch($candidateData['exp'] ?? null, $job["exp_id"]);
+        $fieldMatch = $this->calculateFieldMatch($candidateData['category'] ?? null, $job["category_id"]);
 
         $totalMatchScore = ($locationMatch + $salaryMatch + $experienceMatch + $fieldMatch) / 4;
 
@@ -102,12 +102,20 @@ class JobService
 
     private function calculateLocationMatch($candidateLocation, $jobLocation)
     {
+        if ($candidateLocation === null) {
+            return 1;
+        }
+
         $jobLocations = array_map('intval', explode(',', $jobLocation));
         return in_array($candidateLocation, $jobLocations) ? 1 : 0;
     }
 
     private function calculateSalaryMatch($candidateSalaryRange, $jobSalary, $jobMaxSalary = null)
     {
+        if ($candidateSalaryRange === null) {
+            return 1;
+        }
+
         $salaryRanges = [
             1 => [0, 5000000],
             2 => [5000000, 10000000],
@@ -127,6 +135,10 @@ class JobService
 
     private function calculateExperienceMatch($candidateExperience, $jobExperienceRequired)
     {
+        if ($candidateExperience === null) {
+            return 1;
+        }
+
         $maxDifference = abs($candidateExperience - $jobExperienceRequired);
         $matchScore = 1 - $maxDifference / 6;
 
@@ -135,6 +147,10 @@ class JobService
 
     private function calculateFieldMatch($candidateDesiredFields, $jobField)
     {
+        if ($candidateDesiredFields === null) {
+            return 1;
+        }
+
         $desiredFields = explode(',', $candidateDesiredFields);
         $jobFields = explode(',', $jobField);
 
@@ -179,6 +195,7 @@ class JobService
          $jobs = Job::where('status', 1)
                  ->inRandomOrder()
                  ->with("company")
+                 ->with("city")
                  ->take(50)
                  ->get();
 
