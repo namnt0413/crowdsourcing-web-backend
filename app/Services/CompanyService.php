@@ -27,7 +27,7 @@ class CompanyService
 
     public function getAllCompanies()
     {
-        $companies = Company::all();
+        $companies = Company::select('*')->take(30)->with("city")->get();
         return $companies;
     }
 

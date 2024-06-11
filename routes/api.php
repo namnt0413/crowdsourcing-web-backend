@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\BookmarkController;
 use App\Http\Controllers\Api\CVController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\Api\ExpController;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -72,7 +73,11 @@ Route::group([ 'as' => ''], function () {
     Route::name('positions.')->prefix('position')->group(function () {
         Route::get('/all', [PositionController::class, 'all'])->name('all');
     });
-
+    //Exp
+    Route::apiResource('exps', \App\Http\Controllers\Api\ExpController::class);
+    Route::name('exps.')->prefix('exp')->group(function () {
+        Route::get('/all', [ExpController::class, 'all'])->name('all');
+    });
 
     //Job
     Route::name('job.')->prefix('job')->group(function () {
@@ -85,6 +90,7 @@ Route::group([ 'as' => ''], function () {
         Route::get('filter-jobs', [JobController::class, 'filterJobs']);
         Route::put('/toggle-status-job', [JobController::class, 'toggleStatusJob']);
         Route::delete('/deleteJobs', [JobController::class, 'deleteJobs'])->name('deleteJobs');
+        Route::get('/recommend-jobs', [JobController::class, 'recommendJobs']);
     });
 
     //Apply

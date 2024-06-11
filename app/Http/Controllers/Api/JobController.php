@@ -162,4 +162,14 @@ class JobController extends Controller
         ]);
     }
 
+    public function recommendJobs(Request $request)
+    {
+        $jobs = $this->jobService->recommendJobs($request);
+
+        return response([
+            'recommendJobs' => $jobs,
+            'message' => 'OK'
+        ], 200);
+    }
+
 }

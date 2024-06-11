@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('avatar_url')->nullable();
             $table->string('address')->nullable();
             $table->longText('description')->nullable();
+            $table->integer('city_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
