@@ -192,12 +192,9 @@ class JobService
 
          // Truy vấn dữ liệu các công việc từ database
         //  $jobs = Job::all();
-         $jobs = Job::where('status', 1)
-                 ->inRandomOrder()
-                 ->with("company")
-                 ->with("city")
-                 ->take(50)
-                 ->get();
+         $jobs = Job::selectRaw( '* , DATEDIFF(`jobs`.`deadline`, NOW()) as `remaining_date`')
+            ->where('status', 1)->whereRaw( 'deadline >= NOW()')
+            ->inRandomOrder()->with("company")->with("city")->take(40)->get();
 
          // Tính toán mức độ phù hợp của các công việc với ứng viên bằng fuzzy logic
          $recommendedJobs = [];
