@@ -120,7 +120,7 @@ Route::group([ 'as' => ''], function () {
     //Bookmark
     Route::name('bookmark.')->prefix('bookmark')->group(function () {
         Route::post('/create', [BookmarkController::class, 'create']);
-        Route::delete('/delete/{id}', [BookmarkController::class, 'delete']);
+        Route::post('/delete', [BookmarkController::class, 'delete']);
         Route::get('/list-candidates/{company_id}', [BookmarkController::class, 'listCandidates']);
     });
 

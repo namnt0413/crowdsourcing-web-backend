@@ -68,4 +68,10 @@ class Company extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(City::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'bookmarks');
+    }
+
 }
