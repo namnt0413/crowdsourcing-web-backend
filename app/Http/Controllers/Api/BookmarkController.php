@@ -38,14 +38,14 @@ class BookmarkController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
         try {
-            Bookmark::find($id)->delete();
+            Bookmark::where('company_id','=',$request->company_id)
+            ->where('user_id','=',$request->user_id)->delete();
             return response([
                 'message' => 'OK'
             ], 200);
-
         } catch (\Exception $exception) {
             Log::error('Message: ' . $exception->getMessage() . ' --- Line : ' . $exception->getLine());
             return response()->json([

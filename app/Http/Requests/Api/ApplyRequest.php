@@ -29,7 +29,7 @@ class ApplyRequest extends FormRequest
             'user_id'  => 'required',
             'job_id'      => 'required',
             'file_url'      => 'nullable|string',
-            'date'     => 'required|date|after:today',
+            'date'     => 'required|date',
         ];
     }
 

@@ -23,6 +23,9 @@ use App\Http\Controllers\CompanyAuth\CompanyAuthController;
 use App\Http\Controllers\CompanyAuth\CompanyForgotPasswordController;
 use App\Http\Controllers\CompanyAuth\CompanyResetPasswordController;
 
+use App\Http\Controllers\GoogleMeetController;
+use App\Http\Controllers\InterviewScheduleController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -120,7 +123,7 @@ Route::group([ 'as' => ''], function () {
     //Bookmark
     Route::name('bookmark.')->prefix('bookmark')->group(function () {
         Route::post('/create', [BookmarkController::class, 'create']);
-        Route::delete('/delete/{id}', [BookmarkController::class, 'delete']);
+        Route::post('/delete', [BookmarkController::class, 'delete']);
         Route::get('/list-candidates/{company_id}', [BookmarkController::class, 'listCandidates']);
     });
 
@@ -162,3 +165,12 @@ Route::group([ 'as' => ''], function () {
     });
 
 });
+
+//Interview
+Route::name('schedule-interview.')->prefix('schedule-interview')->group(function () {
+    Route::post('create', [InterviewScheduleController::class, 'create'])->name('schedule-interview.create');
+});
+
+Route::get('google/redirect', [GoogleMeetController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('oauth2callback', [GoogleMeetController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::post('schedule-interview', [GoogleMeetController::class, 'scheduleInterview'])->name('schedule.interview');
