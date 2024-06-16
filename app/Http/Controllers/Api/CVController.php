@@ -96,6 +96,15 @@ class CVController extends Controller
             'message' => 'OK'
         ], 200);
     }
+    public function updateTemplate(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'template_id' => $request->template_id,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
 
     public function detail($id)
     {
