@@ -87,6 +87,7 @@ class CVController extends Controller
             'message' => 'OK'
         ], 200);
     }
+
     public function updateThemeColor(Request $request, $id) {
         $cv = CV::findOrFail($id);
         $cv->update([
@@ -161,6 +162,26 @@ class CVController extends Controller
             'success' => true,
             'message' => 'Cv deleted successfully',
         ]);
+    }
+
+    public function updateAvatar(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'avatar' => $request->avatar,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function updateShowingAvatar(Request $request, $id) {
+        $cv = CV::findOrFail($id);
+        $cv->update([
+            'is_showing_avatar' => $request->is_showing_avatar,
+        ]);
+        return response([
+            'message' => 'OK'
+        ], 200);
     }
 
 }
