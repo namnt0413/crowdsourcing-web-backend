@@ -27,12 +27,19 @@ class CompanyService
 
     public function getAllCompanies()
     {
-        $companies = Company::select('*')->take(30)->with("city")->get();
+        $companies = Company::select('*')->take(30)->with("city")
+            ->withCount(['job' => function($query) {
+                $query->where('deadline','>', Carbon::now() );
+            }])
+            ->get();
         return $companies;
     }
 
     public function detailCompany($id) {
-        $company = Company::where(["id" => $id])->get();
+        $company = Company::where(["id" => $id])
+        ->with(['job' => function($query) {
+            $query->where('deadline','>', Carbon::now())->take(5);
+        }])->get();
         return $company;
     }
 

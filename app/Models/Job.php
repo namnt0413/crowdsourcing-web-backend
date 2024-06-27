@@ -69,4 +69,9 @@ class Job extends Model
         return $this->hasMany(Apply::class);
     }
 
+    public function exp()
+    {
+        return $this->belongsTo(Exp::class);
+    }
+
 }

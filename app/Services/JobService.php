@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Job;
+use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -30,8 +31,13 @@ class JobService
 
     public function detailJob($id) {
         $job = Job::where(["id" => $id])
-        ->with('company','category','city','position')->get();
-        return $job;
+        ->with('company','city','position','exp')->get();
+        $jobCategories = Category::whereIn('id', explode(",",Job::find($id)->category_id ))->get();
+        $jobData =[
+            'job' => $job,
+            'categories' => $jobCategories
+        ];
+        return $jobData;
     }
 
     public function findOrFailById($id) {
